@@ -5,30 +5,16 @@ public class region {
     private final double metal2Percentage;
     private final double metal3Percentage;
     private volatile double currentTemp;
-    private boolean isOuterEdge;
+    private boolean isHeatedCorner;
     private boolean hasBeenVisited = false;
+    int numberOfTimesVisited = 0;
 
-    public region(boolean isOuterEdge){
-        this.isOuterEdge = isOuterEdge;
-        if (!isOuterEdge) {
-            metal1Percentage = .08 + (.58 - .08) * ThreadLocalRandom.current().nextDouble();
-            if (metal1Percentage > 1.0/3.0){
-                double maximum = .58 - metal1Percentage;
-                metal2Percentage = .08 + (maximum - .08) * ThreadLocalRandom.current().nextDouble();
-            }else if (metal1Percentage < 1.0/3.0){
-                double minimum = .08 + (.33 - metal1Percentage);
-                metal2Percentage = minimum + (.58 - minimum) * ThreadLocalRandom.current().nextDouble();
-            }else {
-                metal2Percentage = 1.0 / 3.0;
-            }
-            metal3Percentage = 1 - (metal1Percentage + metal2Percentage);
-            currentTemp =  ThreadLocalRandom.current().nextDouble(5.0, 15.0);
-        }else{
-            metal1Percentage = 0.0;
-            metal2Percentage = 0.0;
-            metal3Percentage = 0.0;
-            currentTemp = 0;
-        }
+    public region(boolean isHeatedCorner, double metal1Percentage, double metal2Percentage, double metal3Percentage, double currentTemp){
+        this.isHeatedCorner = isHeatedCorner;
+        this.metal1Percentage = metal1Percentage;
+        this.metal2Percentage = metal2Percentage;
+        this.metal3Percentage = metal3Percentage;
+        this.currentTemp = currentTemp;
     }
 
 
@@ -44,8 +30,8 @@ public class region {
         return metal3Percentage;
     }
 
-    public boolean getIsOuterEdge(){
-        return isOuterEdge;
+    public boolean getIsHeatedCorner(){
+        return isHeatedCorner;
     }
 
     public double getCurrentTemp(){
@@ -62,5 +48,9 @@ public class region {
 
     public boolean getHasBeenVisited(){
         return hasBeenVisited;
+    }
+
+    public void setHeatedCorner(boolean value){
+        isHeatedCorner = value;
     }
 }
